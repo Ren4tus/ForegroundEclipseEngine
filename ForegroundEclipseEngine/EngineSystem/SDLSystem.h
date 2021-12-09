@@ -16,7 +16,6 @@ private:
 	virtual bool BuildSystem() override;
 	virtual bool SystemInit() override;
 	SDL_Window* g_pWindow = 0;
-	SDL_Renderer* renderer;
 public:
 	SDL_Renderer* GetRenderer();
 };

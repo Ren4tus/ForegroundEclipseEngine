@@ -22,18 +22,7 @@ bool SDLSystem::BuildSystem()
 
 bool SDLSystem::SystemInit()
 {
-	//FILE* fp = 0;
-	//char buf[256];
-	//fp = fopen("E:\\DEV\\ForegroundEclipseEngine_Solution\\x64\\Debug\\confing.txt","r");
-	//std::cout << fgetc(fp);
 
-	//std::fstream configInfo;
-	//configInfo.open("E:\\DEV\\ForegroundEclipseEngine_Solution\\x64\\Debug\\confing.txt");
-	//if (!configInfo.is_open()) {
-	//	std::cerr << "Error: " << strerror(errno);
-	//	//TODO: 프로그램 종료되게 하기
-	//	
-	//}
 	if (SDL_Init(SDL_INIT_EVERYTHING) >= 0) {
 		g_pWindow = SDL_CreateWindow(
 			"TestWindow",
@@ -70,7 +59,6 @@ bool SDLSystem::SystemInit()
 
 SDL_Renderer* SDLSystem::GetRenderer()
 {
-	//return nullptr;
 	//return ((SDLRenderCore*)renderCore)->renderer;
 	return static_cast<SDLRenderCore*>(renderCore)->renderer;
 }
