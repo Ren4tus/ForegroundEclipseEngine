@@ -5,7 +5,7 @@ class SDLRenderCore : public IEngineRendererCore
 {
 public:
 	SDLRenderCore();
-	~SDLRenderCore();
+	virtual ~SDLRenderCore();
 public:
 	SDL_Renderer* renderer;
 public:

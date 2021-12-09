@@ -5,10 +5,11 @@
 #include "Renderer.h"
 #include "SDLSystem/SDLRenderCore.h"
 #include "SDLSystem/SDLInputCore.h"
+#include <cassert>
 SDLSystem::SDLSystem()
 {
 	EngineType = "SDL";
-
+	
 	//inputCore = new SDLInputCore();
 	//EngineRenderer = std::make_shared<Renderer>();
 }
@@ -42,7 +43,16 @@ bool SDLSystem::SystemInit()
 		);
 		if (g_pWindow != 0) {
 			renderCore = new SDLRenderCore();
-			(dynamic_cast<SDLRenderCore*>(renderCore))->renderer = SDL_CreateRenderer(g_pWindow, -1, 0);
+			
+			//((SDLRenderCore*)renderCore)->renderer = SDL_CreateRenderer(g_pWindow, -1, 0);
+			//assert(dynamic_cast<SDLRenderCore*>(renderCore) == static_cast<SDLRenderCore*>(renderCore));
+			//SDLRenderCore*New_pointer = dynamic_cast<SDLRenderCore *>(renderCore);
+			//if (NULL != New_pointer)
+			//{
+			//	New_pointer->renderer = SDL_CreateRenderer(g_pWindow, -1, 0);
+			//}
+			static_cast<SDLRenderCore*>(renderCore)->renderer = SDL_CreateRenderer(g_pWindow, -1, 0);
+				//
 			//g_pRenderer = SDL_CreateRenderer(g_pWindow, -1, 0);
 		}
 		else {
@@ -50,8 +60,9 @@ bool SDLSystem::SystemInit()
 		}
 	}
 
-	SDL_SetRenderDrawColor(GetRenderer(), 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(GetRenderer(), 255, 0, 0, 255);
 	SDL_RenderClear(GetRenderer());
+	SDL_RenderPresent(GetRenderer());
 	SDL_Delay(5000);
 	SDL_Quit();
 	return false;
@@ -59,6 +70,7 @@ bool SDLSystem::SystemInit()
 
 SDL_Renderer* SDLSystem::GetRenderer()
 {
-	return nullptr;
-	return (dynamic_cast<SDLRenderCore*>(renderCore))->renderer;
+	//return nullptr;
+	//return ((SDLRenderCore*)renderCore)->renderer;
+	return static_cast<SDLRenderCore*>(renderCore)->renderer;
 }

@@ -2,6 +2,7 @@
 
 SDLRenderCore::~SDLRenderCore()
 {
+	renderer = nullptr;
 }
 
 SDLRenderCore::SDLRenderCore()
