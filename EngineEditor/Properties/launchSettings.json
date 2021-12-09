@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EngineEditor": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
