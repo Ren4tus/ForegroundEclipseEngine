@@ -39,5 +39,6 @@
     <ClInclude Include="EngineSystem\InputHandler.h" />
     <ClInclude Include="EngineSystem\IInputCore.h" />
     <ClInclude Include="EngineSystem\SDLSystem\SDLInputCore.h" />
+    <ClInclude Include="Common\Singleton.h" />
   </ItemGroup>
 </Project>

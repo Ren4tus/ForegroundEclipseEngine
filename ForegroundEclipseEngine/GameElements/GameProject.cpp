@@ -1,7 +1,6 @@
 #include "GameProject.h"
 #include "Scene.h"
 #include "GameObject.h"
-GameProject* GameProject::instance = nullptr;
 GameProject::GameProject() {
 	
 }
@@ -14,14 +13,6 @@ void GameProject::CreateObject()
 	{
 		(*iter)->AddGameObejct(new GameObject());
 	}
-}
-
-GameProject* GameProject::getIncetance()
-{
-	if (instance == nullptr)
-		instance = new GameProject();
-
-	return instance;
 }
 
 void GameProject::SaveWorldFile()
