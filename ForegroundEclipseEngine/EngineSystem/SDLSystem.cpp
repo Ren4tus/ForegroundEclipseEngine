@@ -13,6 +13,10 @@ SDLSystem::SDLSystem()
 	//inputCore = new SDLInputCore();
 	//EngineRenderer = std::make_shared<Renderer>();
 }
+SDLSystem::~SDLSystem()
+{
+	delete renderCore;
+}
 bool SDLSystem::BuildSystem()
 {
 	//EngineRenderer->currentEngine = this;

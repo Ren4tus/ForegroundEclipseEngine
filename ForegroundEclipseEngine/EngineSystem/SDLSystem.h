@@ -8,9 +8,7 @@ class SDLSystem : public EngineSystem
 public:
 	SDLSystem();
 
-	~SDLSystem()
-	{
-	}
+	~SDLSystem();
 
 private:
 	virtual bool BuildSystem() override;
