@@ -1,48 +1,43 @@
 #pragma once
 #include <string>
 #include <fstream>
-//#include <SDL.h>
 class EngineSystem;
+class Component;
+class GameObject;
 class GameManager {
-public:
-
-
-
-	//bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
-	//void render();
-	//void update();
-	//bool running() { return m_bRunning; }
-	//void handleEvents();
-	//void clean();
-	
-	//SDL_Renderer* getRenderer() const { return m_pRenderer; }
-
-	//void quit() {
-	//	m_bRunning = false;
-	//}
-	//void setWindowScreen(int width, int height);
-	//int getWindowWidth();
-	//int getWindowHeight();
-private:
-	std::string ProjectFolderPath;
-public:
-	EngineSystem* LoadEngineSystemByConfig();
-	
-private:
-	GameManager();
-	static GameManager* s_pInstance;
-	EngineSystem* QueryEngineType(std::string EngineType);
-
-	//SDL_Window* m_pWindow;
-	//SDL_Renderer* m_pRenderer;
-	//bool m_bRunning;
-	//int m_currentFrame;
-	//std::vector<GameObject*> m_gameObjects;
-	//int SCREEN_WIDTH;
-	//int SCREEN_HEIGHT;
-	//GameStateMachine* m_pGameStateMachine;
 public:
 	~GameManager();
 	static GameManager* Instance();
+
+	void SetCurrentEngine(EngineSystem* engine) { currentEngine = engine; }
+	void SetGameName(std::string name) { gameName = name; }
+	std::string GetEngineType() { return engineType; }
+	void SetEngineType(std::string type) { engineType = type; }
+	void setWindowScreen(unsigned int width, unsigned int height) { windowWidth = width; windowHeight = height; }
+	unsigned int getWindowWidth() { return windowWidth; }
+	unsigned int getWindowHeight() { return windowHeight; }
+
+	EngineSystem* LoadEngineSystemByConfig();
+	void ApplySettingsInConfig();
+	void QueryComponentType(std::string name, GameObject* target);
+	EngineSystem* GetCurrentEngine();
+	std::string GetGameName();
+	unsigned int IssuingNewID();
+
+
+private:
+	GameManager();
+
+	EngineSystem* QueryEngineType(std::string EngineType);
+
+	static GameManager* s_pInstance;
+	std::string ProjectFolderPath;
+	std::string ProjectPrimalFilePath;
+	EngineSystem* currentEngine;
+	std::string gameName;
+	std::string engineType;
+	unsigned int windowWidth;
+	unsigned int windowHeight;
+	unsigned int IDCount = 0;
 };
 typedef GameManager GM;

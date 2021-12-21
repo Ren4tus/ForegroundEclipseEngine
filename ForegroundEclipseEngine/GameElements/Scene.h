@@ -1,8 +1,11 @@
 #pragma once
 #include <vector>
 #include <string>
-class Time;
-class GameObject;
+#include "../pch.h"
+#include "../EngineSystem/glSystem/Shaders/shaderClass.h"
+#include "GameObject.h"
+class Component;
+
 class Scene
 {
 public:
@@ -10,16 +13,33 @@ public:
 	Scene(std::string);
 	~Scene();
 
-	void Loop();
-	void AddGameObejct(GameObject* GO);
-	Time* GetTime();
+	void Awake();
+	void Start();
+	void Run();
+	void Render();
+	void AddGameObject(GameObject* GO);
+	void ResetGameObjectWorldPosition();
+	void SetThisComponentToSceneCamera(Component* cameraComp);
+	glCameraComponent* GetGLSceneCamera();
+
+	//OpenGL 전용 함수
+	bool SetSkyBox(Shader& shader, std::string FolderPath);
+	//SkyBox는 렌더링의 마지막에 수행되어야 함.
+	bool DrawSkyBox();
+	bool SetDirectionalLight(Shader& shader);
+
 private:
+	Component* cameraComponent;
 	std::vector<GameObject*> m_ManagedGameObjects;
 	bool m_IsGameEnd;
 	std::string m_name;
 
-	Time* time;
-	const unsigned short FIXED_EXECUTE_TIME = 2;
-	const float UPDATE_EXECUTE_TIME = 3.0f;
-	unsigned short m_fixedUpdateCounter;
+	//skybox
+	Shader* skyboxShader;
+	unsigned int skyboxVAO, skyboxVBO, skyboxEBO;
+	unsigned int cubemapTexture;
+
+	//direct light
+	Shader* directLightShader;
+
 };

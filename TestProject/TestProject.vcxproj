@@ -24,6 +24,7 @@
     <ProjectGuid>{b59e5066-0f41-4593-9d95-ee89402edcae}</ProjectGuid>
     <RootNamespace>TestProject</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>02. GL_Skybox</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -78,13 +79,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\ForegroundEclipseEngine;..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\ForegroundEclipseEngine\Includes\OpenGL\include;..\ForegroundEclipseEngine\Includes\SDL2_image-2.0.5\include;..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)x64\Debug\ForegroundEclipseEngine;..\ForegroundEclipseEngine\Includes\SDL2_image-2.0.5\lib\x64;..\ForegroundEclipseEngine\Includes\OpenGL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>..\x64\Debug;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\ForegroundEclipseEngine;..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)x64\Debug\ForegroundEclipseEngine;..\ForegroundEclipseEngine\Includes\SDL2_image-2.0.5\lib\x64;..\ForegroundEclipseEngine\Includes\OpenGL\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\ForegroundEclipseEngine\Includes\OpenGL\include;..\ForegroundEclipseEngine\Includes\SDL2_image-2.0.5\include;..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -125,12 +126,14 @@
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>..\ForegroundEclipseEngine\Includes\OpenGL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ForegroundEclipseEngine.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ForegroundEclipseEngine.lib;SDL2.lib;SDL2main.lib;glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib;glew32d.lib;glew32sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,14 +148,16 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <ExceptionHandling>false</ExceptionHandling>
       <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>..\ForegroundEclipseEngine\Includes\OpenGL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ForegroundEclipseEngine.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);..\ForegroundEclipseEngine\Includes\SDL2-2.0.12\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ForegroundEclipseEngine.lib;SDL2.lib;SDL2main.lib;glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib;glew32d.lib;glew32sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

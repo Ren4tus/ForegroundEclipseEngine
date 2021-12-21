@@ -6,9 +6,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Input;
+using System;
 
 namespace EngineEditor.GameProject
 {
+    
     [DataContract(Name = "Game")]
     class Project : ViewModelBase
     {
@@ -82,6 +84,8 @@ namespace EngineEditor.GameProject
         public static void Save(Project project)
         {
             Serializer.ToFile(project, project.FullPath);
+            string gameConfigPath = $@"{project.Path}{project.Name}\";
+            File.WriteAllText($@"{Environment.CurrentDirectory}\config.ini", $"[GameFileRoot]\n{gameConfigPath}");
             Logger.Log(MessageType.Info, $"Project saved to {project.FullPath}");
         }
         [OnDeserialized]

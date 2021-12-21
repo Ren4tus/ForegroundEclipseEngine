@@ -1,4 +1,5 @@
 ﻿using EngineEditor.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -177,6 +178,7 @@ namespace EngineEditor.GameProject
                 dirInfo.Attributes |= FileAttributes.Hidden;
                 File.Copy(template.IconFilePath, Path.GetFullPath(Path.Combine(dirInfo.FullName, "Icon.png")));
 
+                
                 var projectXml = File.ReadAllText(template.ProjectFilePath);
                 projectXml = String.Format(projectXml, ProjectName, ProjectPath);
                 var projectPath = Path.GetFullPath(Path.Combine(path, $"{ProjectName}{Project.Extension}"));

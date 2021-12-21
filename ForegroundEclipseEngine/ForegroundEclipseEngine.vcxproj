@@ -11,35 +11,58 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Components\.cpp" />
+    <ClCompile Include="Components\glCameraComponent.cpp" />
+    <ClCompile Include="Components\glMeshComponent.cpp" />
     <ClCompile Include="Components\Transform.cpp" />
     <ClCompile Include="EngineSystem\GameManager.cpp" />
-    <ClCompile Include="EngineSystem\InputHandler.cpp" />
-    <ClCompile Include="EngineSystem\Renderer.cpp" />
-    <ClCompile Include="EngineSystem\SDLSystem.cpp" />
-    <ClCompile Include="EngineSystem\SDLSystem\SDLInputCore.cpp" />
-    <ClCompile Include="EngineSystem\SDLSystem\SDLRenderCore.cpp" />
+    <ClCompile Include="EngineSystem\glSystem\EBO.cpp" />
+    <ClCompile Include="EngineSystem\glSystem\Mesh.cpp" />
+    <ClCompile Include="EngineSystem\glSystem\Shaders\shaderClass.cpp" />
+    <ClCompile Include="EngineSystem\glSystem\Texture.cpp" />
+    <ClCompile Include="EngineSystem\glSystem\VAO.cpp" />
+    <ClCompile Include="EngineSystem\glSystem\VBO.cpp" />
+    <ClCompile Include="EngineSystem\SDLSystem\SDLInputHandler.cpp" />
+    <ClCompile Include="EngineSystem\SDLSystem\SDLMeshComponent.cpp" />
+    <ClCompile Include="EngineSystem\SystemBase\glSystem.cpp" />
+    <ClCompile Include="GameElements\Object.cpp" />
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="EngineSystem\SystemBase\SDLSystem.cpp" />
     <ClCompile Include="GameElements\GameObject.cpp" />
     <ClCompile Include="GameElements\GameProject.cpp" />
     <ClCompile Include="GameElements\Monobehavior.cpp" />
     <ClCompile Include="GameElements\Scene.cpp" />
+    <ClCompile Include="Utilities\glTime.cpp" />
+    <ClCompile Include="Utilities\stb_image.cpp" />
     <ClCompile Include="Utilities\StringConverter.cpp" />
     <ClCompile Include="Utilities\Time.cpp" />
-    <ClCompile Include="Utilities\Vector3.cpp" />
+    <ClCompile Include="Utilities\xml\tinystr.cpp" />
+    <ClCompile Include="Utilities\xml\tinyxml.cpp" />
+    <ClCompile Include="Utilities\xml\tinyxmlerror.cpp" />
+    <ClCompile Include="Utilities\xml\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\Common.h" />
     <ClInclude Include="Common\Singleton.h" />
+    <ClInclude Include="Components\glCameraComponent.h" />
+    <ClInclude Include="Components\glMeshComponent.h" />
+    <ClInclude Include="Components\IMesh.h" />
     <ClInclude Include="Components\Transform.h" />
-    <ClInclude Include="EngineSystem\EngineSystem.h" />
+    <ClInclude Include="EngineSystem\glSystem\EBO.h" />
+    <ClInclude Include="EngineSystem\glSystem\Mesh.h" />
+    <ClInclude Include="EngineSystem\glSystem\Shaders\shaderClass.h" />
+    <ClInclude Include="EngineSystem\glSystem\Texture.h" />
+    <ClInclude Include="EngineSystem\glSystem\VAO.h" />
+    <ClInclude Include="EngineSystem\glSystem\VBO.h" />
+    <ClInclude Include="EngineSystem\SDLSystem\SDLInputHandler.h" />
+    <ClInclude Include="EngineSystem\SDLSystem\SDLMeshComponent.h" />
+    <ClInclude Include="EngineSystem\SystemBase\EngineSystem.h" />
     <ClInclude Include="EngineSystem\GameManager.h" />
-    <ClInclude Include="EngineSystem\IEngineRendererCore.h" />
-    <ClInclude Include="EngineSystem\IInputCore.h" />
-    <ClInclude Include="EngineSystem\InputHandler.h" />
-    <ClInclude Include="EngineSystem\Renderer.h" />
-    <ClInclude Include="EngineSystem\SDLSystem.h" />
-    <ClInclude Include="EngineSystem\SDLSystem\SDLInputCore.h" />
-    <ClInclude Include="EngineSystem\SDLSystem\SDLRenderCore.h" />
+    <ClInclude Include="EngineSystem\SystemBase\glSystem.h" />
+    <ClInclude Include="EngineSystem\SystemBase\SDLSystem.h" />
     <ClInclude Include="GameElements\Behaviour.h" />
     <ClInclude Include="GameElements\Component.h" />
     <ClInclude Include="GameElements\GameObject.h" />
@@ -47,9 +70,13 @@
     <ClInclude Include="GameElements\Monobehavior.h" />
     <ClInclude Include="GameElements\Object.h" />
     <ClInclude Include="GameElements\Scene.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Utilities\glTime.h" />
+    <ClInclude Include="Utilities\stb_image.h" />
     <ClInclude Include="Utilities\StringConverter.h" />
     <ClInclude Include="Utilities\Time.h" />
-    <ClInclude Include="Utilities\Vector3.h" />
+    <ClInclude Include="Utilities\xml\tinystr.h" />
+    <ClInclude Include="Utilities\xml\tinyxml.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -86,14 +113,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <IncludePath>Includes\SDL2_image-2.0.5\include;Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
-    <LibraryPath>Includes\SDL2-2.0.12\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Includes\SDL2-2.0.12\lib\x64;Includes\SDL2_image-2.0.5\lib\x64;Includes\OpenGL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
-    <LibraryPath>Includes\SDL2-2.0.12\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>Includes\SDL2_image-2.0.5\include;Includes\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
+    <LibraryPath>Includes\SDL2-2.0.12\lib\x64;Includes\SDL2_image-2.0.5\lib\x64;Includes\OpenGL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -103,15 +130,14 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExceptionHandling>false</ExceptionHandling>
       <CallingConvention>Cdecl</CallingConvention>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)Includes\SDL2-2.0.12\include;$(ProjectDir)Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Includes\OpenGL\include;$(ProjectDir)Includes\SDL2-2.0.12\include;$(ProjectDir)Common;$(ProjectDir)Includes\SDL2_image-2.0.5\include</AdditionalIncludeDirectories>
       <ProgramDataBaseFileName>$(OutDir)$(TargetName)\ForegroundEclipseEngine.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
@@ -120,7 +146,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib;glew32d.lib;glew32sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Includes\SDL2_image-2.0.5\lib\x64;Includes\SDL2-2.0.12\lib;Includes\OpenGL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,18 +160,17 @@
       <PreprocessorDefinitions>NDEBUG;_LIB;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CallingConvention>Cdecl</CallingConvention>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ControlFlowGuard>false</ControlFlowGuard>
       <ExceptionHandling>false</ExceptionHandling>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)Includes\SDL2-2.0.12\include;$(ProjectDir)Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Includes\OpenGL\include;$(ProjectDir)Includes\SDL2-2.0.12\include;$(ProjectDir)Common;$(ProjectDir)Includes\SDL2_image-2.0.5\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -153,6 +179,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib;glew32d.lib;glew32sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Includes\SDL2_image-2.0.5\lib\x64;Includes\SDL2-2.0.12\lib;Includes\OpenGL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

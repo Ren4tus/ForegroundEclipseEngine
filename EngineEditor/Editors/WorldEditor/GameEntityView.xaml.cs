@@ -3,11 +3,19 @@ using EngineEditor.GameProject;
 using EngineEditor.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace EngineEditor.Editors
 {
@@ -79,6 +87,25 @@ namespace EngineEditor.Editors
             var redoAction = GetIsEnabledAction();
             Project.UndoRedo.Add(new UndoRedoAction(undoAction, redoAction,
                 vm.IsEnabled == true ? "Enable game entity" : "Disable game entity"));
+        }
+        private void OnAddScriptComponent(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as MSEntity;
+            foreach(GameEntity entity in vm.SelectedEntities)
+            {
+                entity.AddComponentCommand.Execute(new Camera(entity));
+            }
+            
+        }
+        private void OnAddComponent_Button_PreviewMouse_LBD(object sender, MouseButtonEventArgs e)
+        {
+            var menu = FindResource("addComponentMenu") as ContextMenu;
+            var btn = sender as ToggleButton;
+            btn.IsChecked = true;
+            menu.Placement = PlacementMode.Bottom;
+            menu.PlacementTarget = btn;
+            menu.MinWidth = btn.ActualWidth;
+            menu.IsOpen = true;
         }
     }
 }

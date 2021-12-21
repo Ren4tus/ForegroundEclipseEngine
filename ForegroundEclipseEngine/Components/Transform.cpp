@@ -2,12 +2,9 @@
 Transform::Transform()
 {
 	m_name = "Transform";
-	m_position.x = 0.0;
-	m_position.y = 0.0;
-	m_position.z = 0.0;
-	m_scale.x = 1.0;
-	m_scale.y = 1.0;
-	m_scale.z = 1.0;
+	m_position = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
 Transform::~Transform()
@@ -15,9 +12,15 @@ Transform::~Transform()
 }
 
 
-void Transform::Translate(Vector3D translateVector)
+void Transform::Translate(glm::vec3 vector)
 {
-	m_position.x += translateVector.x;
-	m_position.y += translateVector.y;
-	m_position.z += translateVector.z;
+	m_position += vector;
+}
+void Transform::Rotate(glm::vec3 rotateVector)
+{
+	m_rotation += rotateVector;
+}
+void Transform::Scale(glm::vec3 scaleVector)
+{
+	m_scale += scaleVector;
 }

@@ -1,17 +1,23 @@
 #include <iostream>
 #include "GameObject.h"
 #include "../Components/Transform.h"
+#include "Scene.h"
+#include "../EngineSystem/GameManager.h"
 GameObject::GameObject()
 {
+	//부모는 별도 지정 없으면 루트 = null
+	parent = nullptr;
+
 	m_name = "GameObject";
 	AddComponent(new Transform());
-	m_reservationPosition = Vector3D(0.0, 0.0, 0.0);
 }
 GameObject::GameObject(std::string name)
 {
+	//부모는 별도 지정 없으면 루트 = null
+	parent = nullptr;
+
 	m_name = name;
 	AddComponent(new Transform());
-	m_reservationPosition = Vector3D(0.0, 0.0, 0.0);
 }
 GameObject::~GameObject()
 {
@@ -22,36 +28,72 @@ GameObject::~GameObject()
 		delete (*iter);
 	}
 }
-void GameObject::AddComponent(Component* newComponent)
-{
-	m_components.push_back(newComponent);
-}
 
 void GameObject::AddChild(GameObject* childGameobject)
 {
 	m_childGameobjects.push_back(childGameobject);
+	// 자식객체의 부모는 이 오브젝트
+	childGameobject->SetParent(this);
+	// 자식객체도 씬에 등록시켜준다
+	ownerScene->AddGameObject(childGameobject);
 }
 
-void GameObject::SetPosition(double x, double y, double z)
+bool GameObject::RemoveChild(GameObject* gameobject)
 {
-	m_reservationPosition = Vector3D(x, y, z);
+	for (std::vector<GameObject*>::iterator iter = m_childGameobjects.begin();
+		iter != m_childGameobjects.end();
+		iter++)
+	{
+		if ((*iter)->GetInstanceID() == gameobject->GetInstanceID()) {
+			m_childGameobjects.erase(iter);
+			(*iter)->SetParent(nullptr);
+			// 부모에서 떨어지면 월드 좌표와 상대좌표가 동일해져야 함
+			(*iter)->GetTransform()->m_position = (*iter)->m_worldPosition;
+			(*iter)->GetTransform()->m_rotation = (*iter)->m_worldRotate;
+			(*iter)->GetTransform()->m_scale = (*iter)->m_worldScale;
+			return true;
+		}
+	}
+	return false;
 }
 
-void GameObject::AddPosition(Vector3D vec3)
+void GameObject::MatrixPropagation()
 {
-	m_reservationPosition.x += vec3.x;
-	m_reservationPosition.y += vec3.y;
-	m_reservationPosition.z += vec3.z;
+	for (std::vector<GameObject*>::iterator iter = m_childGameobjects.begin();
+		iter != m_childGameobjects.end();
+		iter++)
+	{
+		(*iter)->m_worldPosition += this->GetTransform()->m_position;
+	}
 }
 
-void GameObject::SetScale(double x, double y, double z)
+void GameObject::SetPosition(glm::vec3 vector)
 {
-	m_reservationScale.push(new Vector3D(x, y, z));
+	GetTransform()->m_position = vector;
+}
+
+void GameObject::Translate(glm::vec3 vector)
+{
+	GetTransform()->m_position += vector;
+}
+
+void GameObject::Rotate(glm::vec3 vector)
+{
+	GetTransform()->m_rotation = vector;
+}
+
+void GameObject::SetScale(glm::vec3 vector)
+{
+	GetTransform()->m_scale = vector;
 }
 
 void GameObject::Instantiate()
 {
+}
 
+void GameObject::SetParent(GameObject* GO)
+{
+	parent = GO;
 }
 
 Transform* GameObject::GetTransform()
@@ -59,9 +101,9 @@ Transform* GameObject::GetTransform()
 	return static_cast<Transform*>(m_components[0]);
 }
 
-void GameObject::FixedUpdate()
+void GameObject::Awake()
 {
-	//DebugNowPosition();
+	ID = GM::Instance()->IssuingNewID();
 	for (std::vector<GameObject*>::iterator iter = m_childGameobjects.begin();
 		iter != m_childGameobjects.end();
 		iter++)
@@ -70,17 +112,38 @@ void GameObject::FixedUpdate()
 			compIter != (*iter)->m_components.end();
 			compIter++)
 		{
-			if ((dynamic_cast<Monobehavior*>(*compIter)) != NULL) {
-				(dynamic_cast<Monobehavior*>(*compIter))->FixedUpdate();
-			}
-			
+			(*compIter)->SetInstanceID(GM::Instance()->IssuingNewID());
 		}
 	}
 	for (std::vector<Component*>::iterator mCompiter = m_components.begin();
 		mCompiter != m_components.end();
 		mCompiter++)
 	{
-		if ((dynamic_cast<Monobehavior*>(*mCompiter)) != NULL) {
+		(*mCompiter)->SetInstanceID(GM::Instance()->IssuingNewID());
+	}
+}
+
+void GameObject::FixedUpdate()
+{
+	for (std::vector<GameObject*>::iterator iter = m_childGameobjects.begin();
+		iter != m_childGameobjects.end();
+		iter++)
+	{
+		for (std::vector<Component*>::iterator compIter = (*iter)->m_components.begin();
+			compIter != (*iter)->m_components.end();
+			compIter++)
+		{
+			if (IsValid(*compIter))
+			{
+				(dynamic_cast<Monobehavior*>(*compIter))->FixedUpdate();
+			}
+		}
+	}
+	for (std::vector<Component*>::iterator mCompiter = m_components.begin();
+		mCompiter != m_components.end();
+		mCompiter++)
+	{
+		if (IsValid(*mCompiter)) {
 			(dynamic_cast<Monobehavior*>(*mCompiter))->FixedUpdate();
 		}
 	}
@@ -96,7 +159,8 @@ void GameObject::Update()
 			compIter != (*iter)->m_components.end();
 			compIter++)
 		{
-			if ((dynamic_cast<Monobehavior*>(*compIter)) != NULL) {
+			if (IsValid(*compIter))
+			{
 				(dynamic_cast<Monobehavior*>(*compIter))->Update();
 			}
 		}
@@ -105,7 +169,8 @@ void GameObject::Update()
 		mCompiter != m_components.end();
 		mCompiter++)
 	{
-		if ((dynamic_cast<Monobehavior*>(*mCompiter)) != NULL) {
+		if (IsValid(*mCompiter))
+		{
 			(dynamic_cast<Monobehavior*>(*mCompiter))->Update();
 		}
 	}
@@ -113,15 +178,6 @@ void GameObject::Update()
 
 void GameObject::Start()
 {
-	//matrix propagation
-	this->GetTransform()->Translate(m_reservationPosition);
-	for (std::vector<GameObject*>::iterator iter = m_childGameobjects.begin();
-		iter != m_childGameobjects.end();
-		iter++)
-	{
-		(*iter)->AddPosition(this->GetTransform()->m_position);
-	}
-
 	for (std::vector<GameObject*>::iterator iter = m_childGameobjects.begin();
 		iter != m_childGameobjects.end();
 		iter++)
@@ -130,7 +186,8 @@ void GameObject::Start()
 			compIter != (*iter)->m_components.end();
 			compIter++)
 		{
-			if ((dynamic_cast<Monobehavior*>(*compIter)) != NULL) {
+			if (IsValid(*compIter))
+			{
 				(dynamic_cast<Monobehavior*>(*compIter))->Start();
 			}
 		}
@@ -139,16 +196,32 @@ void GameObject::Start()
 		iter != m_components.end();
 		iter++)
 	{
-		if ((dynamic_cast<Monobehavior*>(*iter)) != NULL) {
+		if (IsValid(*iter)) {
 			(dynamic_cast<Monobehavior*>(*iter))->Start();
 		}
 	}
-
 }
 
-void GameObject::DebugNowPosition()
+void GameObject::Render()
 {
-	Vector3D tempPosition = this->GetTransform()->m_position;
-	std::cout << m_name + ": (" << tempPosition.x << "," << tempPosition.y << "," << tempPosition.z << ")" << std::endl;
+	meshComponent = GetComponent<IMesh>();
+	if (meshComponent != nullptr) {
+		if ((dynamic_cast<Behaviour*>(meshComponent))->IsActive() == true) {
+			(dynamic_cast<IMesh*>(meshComponent))->DrawMesh();
+		}
+	}
 }
 
+bool GameObject::IsValid(Component* comp)
+{
+	Monobehavior* tempCastedComp = dynamic_cast<Monobehavior*>(comp);
+
+	if (
+		tempCastedComp != NULL &&
+		tempCastedComp->IsActive() == true
+		)
+	{
+		return true;
+	}
+	return false;
+}

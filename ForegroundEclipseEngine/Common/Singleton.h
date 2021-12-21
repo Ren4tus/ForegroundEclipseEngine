@@ -32,5 +32,4 @@ public:
 private:
 	static T* m_pInstance;
 };
-
 template <typename T> T* Singleton<T>::m_pInstance = 0;

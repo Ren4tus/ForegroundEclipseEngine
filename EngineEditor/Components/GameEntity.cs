@@ -13,6 +13,7 @@ namespace EngineEditor.Components
 {
     [DataContract]
     [KnownType(typeof(Transform))]
+    [KnownType(typeof(Camera))]
     internal class GameEntity : ViewModelBase
     {
         private int _entityId = ID.INVALID_ID;
@@ -78,7 +79,19 @@ namespace EngineEditor.Components
                 }
             }
         }
-
+        public ICommand AddComponentCommand { get; private set; }
+        private void AddComponent(Component entity, int index = -1)
+        {
+            Debug.Assert(!_components.Contains(entity));
+            if (index == -1)
+            {
+                _components.Add(entity);
+            }
+            else
+            {
+                _components.Insert(index, entity);
+            }
+        }
         [DataMember]
         public Scene ParentScene { get; private set; }
 
@@ -95,6 +108,16 @@ namespace EngineEditor.Components
                 Components = new ReadOnlyObservableCollection<Component>(_components);
                 OnPropertyChanged(nameof(Components));
             }
+            AddComponentCommand = new RelayCommand<Component>(x =>
+            {
+                AddComponent(x);
+                var entityIndex = _components.Count - 1;
+
+                //Project.UndoRedo.Add(new UndoRedoAction(
+                //    () => RemoveGameEnity(x),
+                //    () => AddGameEnity(x, entityIndex),
+                //    $"Add {x.Name} to {Name}"));
+            });
         }
 
         public GameEntity(Scene scene)
@@ -108,7 +131,6 @@ namespace EngineEditor.Components
 
     internal abstract class MSEntity : ViewModelBase
     {
-        // Enables updates to selected entities
         private bool _enableUpdates = true;
 
         private bool? _isEnabled;
